@@ -12,24 +12,28 @@ func _ready():
 
 
 func _process(delta):
-	if self.position.distance_to(_target) > 1 :
-		var direction = self.position.direction_to(_target)
-		if direction.x > 0:
-			turn_right()
-		else:
-			turn_left()
-
-	# warning-ignore:return_value_discarded
-		move_and_collide(direction * delta * 100)
-	else:
+	if $NavigationAgent2D.is_navigation_finished():
 		$body.play("idle")
 		$rest_timer.start()
 		set_process(false)
+		return
+
+	var next_point = $NavigationAgent2D.get_next_path_position()
+	var direction = position.direction_to(next_point)
+
+	if direction.x > 0:
+		turn_right()
+	else:
+		turn_left()
+
+	# warning-ignore:return_value_discarded
+	move_and_collide(direction * delta * 100)
 
 
 func _pick_random_position():
 	randomize()
-	_target = Vector2(randi() % 445 + 5, randi() % 245 + 5)
+	_target = Vector2(randi() % 1335 + 15, randi() % 735 + 15)
+	$NavigationAgent2D.target_position = _target
 
 
 func _on_rest_timer_timeout():

@@ -13,6 +13,7 @@ extends CharacterBody2D
 
 var is_moving = false
 var is_attacking = false
+var _nav_target := Vector2.ZERO
 
 func _ready():
   # Here is where I define which goals are available for this
@@ -25,6 +26,7 @@ func _ready():
 		KeepFirepitBurningGoal.new(),
 		KeepFedGoal.new(),
 		CalmDownGoal.new(),
+		KeepSaneGoal.new(),
 		RelaxGoal.new()
 	])
 	
@@ -44,17 +46,31 @@ func _process(_delta):
 
 
 
+func navigate_to(target: Vector2):
+	if _nav_target != target:
+		_nav_target = target
+		$NavigationAgent2D.target_position = target
+
 func move_to(direction, delta):
+	# direction is passed in by GOAP actions as direction_to(target).
+	# We derive the actual target by projecting along that direction and
+	# update the nav agent so the path avoids water obstacles.
+	var intended_target = position + direction * 2000.0
+	navigate_to(intended_target)
+
 	is_moving = true
 	is_attacking = false
 	$body.play("run")
-	if direction.x > 0:
+
+	var next_point = $NavigationAgent2D.get_next_path_position()
+	var nav_direction = position.direction_to(next_point)
+
+	if nav_direction.x > 0:
 		turn_right()
 	else:
 		turn_left()
 
-  # warning-ignore:return_value_discarded
-	move_and_collide(direction * delta * 100)
+	move_and_collide(nav_direction * delta * 100)
 
 
 
@@ -91,6 +107,8 @@ func calm_down():
 func _on_detection_radius_body_entered(body):
 	if body.is_in_group("troll"):
 		WorldState.set_state("is_frightened", true)
+		var current_sanity = WorldState.get_state("sanity", 100)
+		WorldState.set_state("sanity", max(0, current_sanity - 45))
 
 
 func _on_calm_down_timer_timeout():

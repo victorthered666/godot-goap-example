@@ -21,6 +21,9 @@ func _ready():
 		CalmDownAction.new(),
 		FindCoverAction.new(),
 		FindFoodAction.new(),
+		MeditateAction.new(),
+		WeakMeditateAction.new(),
+		WanderAction.new(),
 	])
 
 

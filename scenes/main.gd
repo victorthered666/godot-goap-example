@@ -2,6 +2,7 @@ extends Node2D
 
 
 @onready var _hunger_field = $HUD/VBoxContainer/MarginContainer/HBoxContainer/hunger
+@onready var _sanity_field = $HUD/VBoxContainer/MarginContainer/HBoxContainer/sanity
 
 
 func _on_hanger_timer_timeout():
@@ -10,6 +11,8 @@ func _on_hanger_timer_timeout():
 		_hunger_field.value += 2
 
 	WorldState.set_state("hunger", _hunger_field.value)
+
+	_sanity_field.value = WorldState.get_state("sanity", 100)
 
 
 func _on_reload_pressed():
