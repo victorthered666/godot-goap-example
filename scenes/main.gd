@@ -1,6 +1,6 @@
 extends Node2D
 
-const CHAR_IDS = ["satyr", "satyr2", "satyr3", "satyr4"]
+const CHAR_IDS = ["satyr", "satyr2", "satyr3", "satyr4", "satyr5", "satyr6", "satyr7"]
 
 var _selected_char_id: String = "satyr"
 var _camera: Camera2D
@@ -12,6 +12,9 @@ var _camera: Camera2D
 	"satyr2": $HUD/VBoxContainer/MarginContainer/VBoxContainer/CharacterSelector/btn_satyr2,
 	"satyr3": $HUD/VBoxContainer/MarginContainer/VBoxContainer/CharacterSelector/btn_satyr3,
 	"satyr4": $HUD/VBoxContainer/MarginContainer/VBoxContainer/CharacterSelector/btn_satyr4,
+	"satyr5": $HUD/VBoxContainer/MarginContainer/VBoxContainer/CharacterSelector/btn_satyr5,
+	"satyr6": $HUD/VBoxContainer/MarginContainer/VBoxContainer/CharacterSelector/btn_satyr6,
+	"satyr7": $HUD/VBoxContainer/MarginContainer/VBoxContainer/CharacterSelector/btn_satyr7,
 }
 
 

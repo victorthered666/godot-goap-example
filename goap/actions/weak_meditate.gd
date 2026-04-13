@@ -11,8 +11,12 @@ func is_valid() -> bool:
 	# Fallback meditation: valid when there is no firepit to meditate at properly
 	return WorldState.get_elements("firepit").size() == 0
 
-func get_cost(_blackboard) -> int:
-	return 5
+func get_cost(blackboard) -> int:
+	if blackboard.has("position"):
+		var closest = WorldState.get_closest_element("cover", blackboard)
+		if closest:
+			return max(1, int(closest.position.distance_to(blackboard.position) / 50)) + 5
+	return 10
 
 func get_preconditions() -> Dictionary:
 	return {

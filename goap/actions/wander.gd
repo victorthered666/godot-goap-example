@@ -71,9 +71,9 @@ func perform(actor, delta) -> bool:
 
 func _pick_random_position(actor):
 	# 参考troll的移动代码，限制在地图范围内
-	var map_width = 1335
-	var map_height = 735
-	var margin = 15
+	var map_width = 10680
+	var map_height = 5880
+	var margin = 120
 	
 	# 生成随机目标位置
 	_target_position = Vector2(randi() % map_width + margin, randi() % map_height + margin)

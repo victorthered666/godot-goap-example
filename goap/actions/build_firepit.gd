@@ -8,7 +8,11 @@ const Firepit = preload("res://scenes/firepit.tscn")
 func get_clazz(): return "BuildFirepitAction"
 
 
-func get_cost(_blackboard) -> int:
+func get_cost(blackboard) -> int:
+	if blackboard.has("position"):
+		var closest = WorldState.get_closest_element("firepit_spot", blackboard)
+		if closest:
+			return max(1, int(closest.position.distance_to(blackboard.position) / 50))
 	return 1
 
 

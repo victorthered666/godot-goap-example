@@ -13,7 +13,11 @@ func is_valid() -> bool:
 	return WorldState.get_elements("firepit").size() > 0 and not WorldState.get_state("is_frightened", false)
 
 
-func get_cost(_blackboard) -> int:
+func get_cost(blackboard) -> int:
+	if blackboard.has("position"):
+		var closest = WorldState.get_closest_element("firepit", blackboard)
+		if closest:
+			return max(1, int(closest.position.distance_to(blackboard.position) / 50))
 	return 2
 
 

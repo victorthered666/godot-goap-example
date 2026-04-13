@@ -32,7 +32,7 @@ func _process(delta):
 
 func _pick_random_position():
 	randomize()
-	_target = Vector2(randi() % 1335 + 15, randi() % 735 + 15)
+	_target = Vector2(randi() % 10680 + 120, randi() % 5880 + 120)
 	$NavigationAgent2D.target_position = _target
 
 
