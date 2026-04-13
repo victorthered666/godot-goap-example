@@ -10,7 +10,12 @@ func is_valid() -> bool:
 
 
 func priority() -> int:
-	return 1 if WorldState.get_state("hunger", 0) < 75 else 2
+	var hunger = WorldState.get_state("hunger", 0)
+	if hunger >= 90:
+		return 12  # Critical starvation — beats CalmDown (10) and KeepSane (9)
+	elif hunger >= 75:
+		return 8   # Urgent — beats KeepSane low threshold (9 only when sanity < 30)
+	return 1
 
 
 func get_desired_state() -> Dictionary:

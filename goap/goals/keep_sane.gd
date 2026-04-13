@@ -10,12 +10,12 @@ func is_valid() -> bool:
 
 
 func priority() -> int:
-	# 理智值越低，优先级越高
+	# 理智值越低，优先级越高，但始终低于CalmDown（10）
 	var sanity = WorldState.get_state("sanity", 100)
 	if sanity < 15:
-		return 15
-	elif sanity < 30:
 		return 9
+	elif sanity < 30:
+		return 7
 	return 5
 
 

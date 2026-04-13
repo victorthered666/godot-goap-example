@@ -27,7 +27,8 @@ func perform(actor, delta) -> bool:
 		return false
 
 	if closest_food.position.distance_to(actor.position) < 5:
-		WorldState.set_state("hunger", WorldState.get_state("hunger") - closest_food.nutrition)
+		var new_hunger = max(0, WorldState.get_state("hunger", 0) - closest_food.nutrition)
+		WorldState.set_state("hunger", new_hunger)
 		closest_food.queue_free()
 		return true
 

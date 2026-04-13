@@ -11,16 +11,21 @@
 #
 extends CharacterBody2D
 
+# Unique identifier for per-character state. Set via the scene or _ready using node name.
+var char_id: String = ""
+
 var is_moving = false
 var is_attacking = false
 var _nav_target := Vector2.ZERO
 
 func _ready():
-  # Here is where I define which goals are available for this
-  # npc. In this implementation, goals priority are calculated
-  # dynamically. Depending on your use case you might want to
-  # have a way to define different goal priorities depending on
-  # npc.
+	# Use the node name as the unique character id (satyr, satyr2, satyr3, satyr4)
+	char_id = name
+
+	# Initialise per-character state defaults
+	WorldState.set_char_state(char_id, "hunger", 0)
+	WorldState.set_char_state(char_id, "sanity", 100)
+
 	var agent = GoapAgent.new()
 	agent.init(self, [
 		KeepFirepitBurningGoal.new(),
@@ -29,13 +34,12 @@ func _ready():
 		KeepSaneGoal.new(),
 		RelaxGoal.new()
 	])
-	
 	add_child(agent)
 
 
 func _process(_delta):
-	$labels/labels/afraid_label.visible = WorldState.get_state("is_frightened", false)
-	$labels/labels/hungry_label.visible = WorldState.get_state("hunger", 0) >= 50
+	$labels/labels/afraid_label.visible = WorldState.get_char_state(char_id, "is_frightened", false)
+	$labels/labels/hungry_label.visible = WorldState.get_char_state(char_id, "hunger", 0) >= 50
 
 	if is_attacking:
 		$body.play("attack")
@@ -45,16 +49,12 @@ func _process(_delta):
 		$body.play("idle")
 
 
-
 func navigate_to(target: Vector2):
 	if _nav_target != target:
 		_nav_target = target
 		$NavigationAgent2D.target_position = target
 
 func move_to(direction, delta):
-	# direction is passed in by GOAP actions as direction_to(target).
-	# We derive the actual target by projecting along that direction and
-	# update the nav agent so the path avoids water obstacles.
 	var intended_target = position + direction * 2000.0
 	navigate_to(intended_target)
 
@@ -73,18 +73,15 @@ func move_to(direction, delta):
 	move_and_collide(nav_direction * delta * 100)
 
 
-
 func turn_right():
 	if not $body.flip_h:
 		return
-
 	$body.flip_h = false
 
 
 func turn_left():
 	if $body.flip_h:
 		return
-
 	$body.flip_h = true
 
 
@@ -95,21 +92,19 @@ func chop_tree(tree):
 
 
 func calm_down():
-	if WorldState.get_state("is_frightened") == false:
+	if WorldState.get_char_state(char_id, "is_frightened", false) == false:
 		return true
-
 	if $calm_down_timer.is_stopped():
 		$calm_down_timer.start()
-
 	return false
 
 
 func _on_detection_radius_body_entered(body):
 	if body.is_in_group("troll"):
-		WorldState.set_state("is_frightened", true)
-		var current_sanity = WorldState.get_state("sanity", 100)
-		WorldState.set_state("sanity", max(0, current_sanity - 45))
+		WorldState.set_char_state(char_id, "is_frightened", true)
+		var current_sanity = WorldState.get_char_state(char_id, "sanity", 100)
+		WorldState.set_char_state(char_id, "sanity", max(0, current_sanity - 45))
 
 
 func _on_calm_down_timer_timeout():
-	WorldState.set_state("is_frightened", false)
+	WorldState.set_char_state(char_id, "is_frightened", false)

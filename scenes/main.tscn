@@ -4456,8 +4456,19 @@ position = Vector2(1300, 350)
 [node name="satyr" parent="." unique_id=176445368 instance=ExtResource("4")]
 position = Vector2(495.009, 461.628)
 
-[node name="Camera2D" type="Camera2D" parent="satyr" unique_id=1635810106]
+[node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(2, 2)
+position_smoothing_enabled = true
+position_smoothing_speed = 8.0
+
+[node name="satyr2" parent="." instance=ExtResource("4")]
+position = Vector2(300, 200)
+
+[node name="satyr3" parent="." instance=ExtResource("4")]
+position = Vector2(900, 150)
+
+[node name="satyr4" parent="." instance=ExtResource("4")]
+position = Vector2(1100, 600)
 
 [node name="troll" parent="." unique_id=153290441 instance=ExtResource("3")]
 position = Vector2(216, 99)
@@ -4477,42 +4488,73 @@ alignment = 2
 layout_mode = 2
 theme_override_constants/margin_left = 5
 
-[node name="HBoxContainer" type="HBoxContainer" parent="HUD/VBoxContainer/MarginContainer" unique_id=1686130247]
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD/VBoxContainer/MarginContainer"]
 layout_mode = 2
 
-[node name="hunger_label" type="Label" parent="HUD/VBoxContainer/MarginContainer/HBoxContainer" unique_id=159747024]
+[node name="CharacterSelector" type="HBoxContainer" parent="HUD/VBoxContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="select_label" type="Label" parent="HUD/VBoxContainer/MarginContainer/VBoxContainer/CharacterSelector"]
+layout_mode = 2
+text = "Character:"
+
+[node name="btn_satyr" type="Button" parent="HUD/VBoxContainer/MarginContainer/VBoxContainer/CharacterSelector"]
+layout_mode = 2
+toggle_mode = true
+button_pressed = true
+text = "1"
+
+[node name="btn_satyr2" type="Button" parent="HUD/VBoxContainer/MarginContainer/VBoxContainer/CharacterSelector"]
+layout_mode = 2
+toggle_mode = true
+text = "2"
+
+[node name="btn_satyr3" type="Button" parent="HUD/VBoxContainer/MarginContainer/VBoxContainer/CharacterSelector"]
+layout_mode = 2
+toggle_mode = true
+text = "3"
+
+[node name="btn_satyr4" type="Button" parent="HUD/VBoxContainer/MarginContainer/VBoxContainer/CharacterSelector"]
+layout_mode = 2
+toggle_mode = true
+text = "4"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HUD/VBoxContainer/MarginContainer/VBoxContainer" unique_id=1686130247]
+layout_mode = 2
+
+[node name="hunger_label" type="Label" parent="HUD/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=159747024]
 layout_mode = 2
 text = "Hunger"
 
-[node name="hunger" type="ProgressBar" parent="HUD/VBoxContainer/MarginContainer/HBoxContainer" unique_id=65703260]
+[node name="hunger" type="ProgressBar" parent="HUD/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=65703260]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_vertical = 4
 
-[node name="sanity_label" type="Label" parent="HUD/VBoxContainer/MarginContainer/HBoxContainer" unique_id=1166726488]
+[node name="sanity_label" type="Label" parent="HUD/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1166726488]
 layout_mode = 2
 text = "Sanity"
 
-[node name="sanity" type="ProgressBar" parent="HUD/VBoxContainer/MarginContainer/HBoxContainer" unique_id=1356823027]
+[node name="sanity" type="ProgressBar" parent="HUD/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1356823027]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 size_flags_vertical = 4
 value = 100.0
 
-[node name="reload" type="Button" parent="HUD/VBoxContainer/MarginContainer/HBoxContainer" unique_id=226333521]
+[node name="reload" type="Button" parent="HUD/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=226333521]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 0
 text = "Reload"
 
-[node name="pause" type="Button" parent="HUD/VBoxContainer/MarginContainer/HBoxContainer" unique_id=563273713]
+[node name="pause" type="Button" parent="HUD/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=563273713]
 process_mode = 3
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 0
 text = "Pause"
 
-[node name="console" type="Button" parent="HUD/VBoxContainer/MarginContainer/HBoxContainer" unique_id=511432042]
+[node name="console" type="Button" parent="HUD/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=511432042]
 process_mode = 3
 layout_mode = 2
 size_flags_horizontal = 8
@@ -4555,6 +4597,10 @@ position = Vector2(568.404, 496.347)
 navigation_polygon = SubResource("NavigationPolygon_walkable")
 
 [connection signal="timeout" from="hunger_timer" to="." method="_on_hanger_timer_timeout"]
-[connection signal="pressed" from="HUD/VBoxContainer/MarginContainer/HBoxContainer/reload" to="." method="_on_reload_pressed"]
-[connection signal="pressed" from="HUD/VBoxContainer/MarginContainer/HBoxContainer/pause" to="." method="_on_pause_pressed"]
-[connection signal="pressed" from="HUD/VBoxContainer/MarginContainer/HBoxContainer/console" to="." method="_on_console_pressed"]
+[connection signal="pressed" from="HUD/VBoxContainer/MarginContainer/VBoxContainer/CharacterSelector/btn_satyr" to="." method="_on_select_character" binds=["satyr"]]
+[connection signal="pressed" from="HUD/VBoxContainer/MarginContainer/VBoxContainer/CharacterSelector/btn_satyr2" to="." method="_on_select_character" binds=["satyr2"]]
+[connection signal="pressed" from="HUD/VBoxContainer/MarginContainer/VBoxContainer/CharacterSelector/btn_satyr3" to="." method="_on_select_character" binds=["satyr3"]]
+[connection signal="pressed" from="HUD/VBoxContainer/MarginContainer/VBoxContainer/CharacterSelector/btn_satyr4" to="." method="_on_select_character" binds=["satyr4"]]
+[connection signal="pressed" from="HUD/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/reload" to="." method="_on_reload_pressed"]
+[connection signal="pressed" from="HUD/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/pause" to="." method="_on_pause_pressed"]
+[connection signal="pressed" from="HUD/VBoxContainer/MarginContainer/VBoxContainer/HBoxContainer/console" to="." method="_on_console_pressed"]
